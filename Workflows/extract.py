@@ -4,11 +4,12 @@ import json
 import os
 from typing import List
 
+from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_ollama import ChatOllama
-from utils import read_text_files, chunk_text
+from utils import read_text_files, chunk_text, get_llm
 
 
 async def main():
@@ -17,8 +18,10 @@ async def main():
     ap.add_argument("--concurrency", type=int, default=8)
     ap.add_argument("--chunk_size", type=int, default=1200)
     ap.add_argument("--chunk_overlap", type=int, default=150)
-    ap.add_argument("--min_items", type=int, default=3, help="Target minimum items for topics/entities if present")
     args = ap.parse_args()
+
+    # Ensure .env variables (LLM_MODEL, OLLAMA_BASE_URL) are loaded
+    load_dotenv()
 
     text = read_text_files([args.path])
     chunks = chunk_text(text, chunk_size=args.chunk_size, chunk_overlap=args.chunk_overlap)
@@ -30,24 +33,23 @@ async def main():
 
     parser = PydanticOutputParser(pydantic_object=Info)
 
-    prompt = ChatPromptTemplate.from_messages([
-        (
-            "system",
-            "You are an information extraction assistant. Extract concise topics, actions, and entities.",
-        ),
-        (
-            "user",
-            "Follow the format strictly and output JSON only.\n"
-            "{format_instructions}\n\n"
-            "Guidelines:\n"
-            "- If present, return at least {min_items} items for 'topics' and 'entities'.\n"
-            "- Do not fabricate information. If none, return an empty list.\n"
-            "- Keep items short (1-3 words).\n\n"
-            "Passage:\n{passage}",
-        ),
-    ])
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "You are an information extraction assistant. "
+                "Extract concise topics, actions, and entities from the passage. "
+                "Return a JSON object with 'topics', 'actions', and 'entities' keys. "
+                "If no items are found for a category, return an empty list.",
+            ),
+            (
+                "user",
+                "{format_instructions}\n\nPassage:\n{passage}",
+            ),
+        ]
+    )
 
-    llm = ChatOllama(model=os.getenv("LLM_MODEL", "gemma3:1b"), temperature=0)
+    llm = get_llm(temperature=0)
     chain = prompt | llm | parser
 
     sem = asyncio.Semaphore(max(1, args.concurrency))
@@ -60,7 +62,6 @@ async def main():
                 return await chain.ainvoke({
                     "format_instructions": fmt,
                     "passage": passage,
-                    "min_items": args.min_items,
                 })
             except Exception:
                 # Fallback: ask again with a simpler instruction
@@ -90,7 +91,6 @@ async def main():
             full = await chain.ainvoke({
                 "format_instructions": fmt,
                 "passage": text[:12000],  # safety limit
-                "min_items": args.min_items,
             })
             if isinstance(full, Info):
                 for key in ("topics", "actions", "entities"):

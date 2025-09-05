@@ -34,7 +34,7 @@ async def main():
         ("system", "You combine partial summaries into a single coherent summary."),
         ("user", "Combine the bullet lists into one crisp summary (6-8 bullets):\n\n{points}"),
     ])
-    reduce_chain = reduce_prompt | get_llm() | StrOutputParser()
+    reduce_chain = reduce_prompt | get_llm(temperature=0) | StrOutputParser()
 
     combined = "\n\n".join(summaries)
     final_summary = await reduce_chain.ainvoke({"points": combined})

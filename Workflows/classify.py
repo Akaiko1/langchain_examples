@@ -21,7 +21,7 @@ async def main():
         ("system", "Classify the passage strictly into one label from the provided set."),
         ("user", "Labels: {labels}\n\nPassage:\n{passage}\n\nRespond with one label only."),
     ])
-    chain = prompt | get_llm() | StrOutputParser()
+    chain = prompt | get_llm(temperature=0) | StrOutputParser()
 
     sem = asyncio.Semaphore(max(1, args.concurrency))
 
@@ -29,12 +29,33 @@ async def main():
         async with sem:
             return await chain.ainvoke({"labels": labels_str, "passage": passage})
 
+    print(f"Processing {len(chunks)} chunks...")
     preds = await asyncio.gather(*[asyncio.create_task(run_classify(c)) for c in chunks])
-    preds = [p.strip().split()[0] for p in preds if p and isinstance(p, str)]
-    counter = collections.Counter(preds)
+    
+    processed_preds = []
+    for p in preds:
+        if p and isinstance(p, str):
+            p_clean = p.strip().lower()
+            # First, try for an exact match
+            found = False
+            for label in args.labels:
+                if label.lower() == p_clean:
+                    processed_preds.append(label)
+                    found = True
+                    break
+            if found:
+                continue
+
+            # If no exact match, fall back to substring search
+            for label in args.labels:
+                if label.lower() in p_clean:
+                    processed_preds.append(label)
+                    break # Move to the next prediction once a label is found
+
+    counter = collections.Counter(processed_preds)
     winner, _ = counter.most_common(1)[0] if counter else ("unknown", 0)
 
-    print("Predictions per chunk:")
+    print("\nPredictions per chunk:")
     for lbl, cnt in counter.most_common():
         print(f"- {lbl}: {cnt}")
     print(f"\nMajority label: {winner}")

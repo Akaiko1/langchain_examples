@@ -21,8 +21,11 @@ def chunk_text(text: str, chunk_size: int = 1200, chunk_overlap: int = 150) -> L
     return [d.page_content for d in docs]
 
 
-def get_llm():
+def get_llm(temperature: float = None):
     load_dotenv()
     model = os.getenv("LLM_MODEL", "gemma3:1b")
-    return ChatOllama(model=model)
+    params = {"model": model}
+    if temperature is not None:
+        params["temperature"] = temperature
+    return ChatOllama(**params)
 

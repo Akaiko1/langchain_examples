@@ -19,7 +19,7 @@ async def main():
         ("system", "Translate the passage accurately and naturally."),
         ("user", "Translate to {lang}:\n\n{passage}"),
     ])
-    chain = prompt | get_llm() | StrOutputParser()
+    chain = prompt | get_llm(temperature=0) | StrOutputParser()
 
     sem = asyncio.Semaphore(max(1, args.concurrency))
 

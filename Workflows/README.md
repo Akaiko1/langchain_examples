@@ -25,7 +25,7 @@ Place `.txt` or `.md` files under `data/`. A sample file is included.
 - Summarize (map-reduce, async):
   - `python summarize.py data/multistep_sample.txt`
 - Extract structured fields (JSON, async):
-  - `python extract.py data/multistep_sample.txt --chunk_size 1000 --chunk_overlap 120 --min_items 3`
+  - `python extract.py data/multistep_sample.txt --chunk_size 1000 --chunk_overlap 120`
 - Translate to a language (map-reduce, async):
   - `python translate.py data/multistep_sample.txt --lang es`
 - Classify with a label set (async):
