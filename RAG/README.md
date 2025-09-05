@@ -5,7 +5,7 @@ A minimal Retrieval-Augmented Generation (RAG) setup using LangChain, FAISS, and
 ## Prerequisites
 
 - Python 3.10+
-- Ollama installed and running: https://ollama.ai
+- Ollama installed and running: <https://ollama.ai>
 - Models pulled:
   - `ollama pull gemma3:1b` (or another Gemma model you prefer)
   - `ollama pull nomic-embed-text` (embedding model)
@@ -41,6 +41,8 @@ You can also run the small CLI wrapper:
 ```bash
 python app.py
 ```
+
+The CLI streams tokens live as the model responds.
 
 ## Configuration
 

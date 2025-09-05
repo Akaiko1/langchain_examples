@@ -1,0 +1,16 @@
+LangChain Examples Repository
+
+This repository contains practical examples for:
+- Retrieval-Augmented Generation (RAG) over local documents
+- Multi-step workflows like summarization, extraction, translation, and classification
+- Tool-using agents and stateful orchestration using LangGraph (planned)
+
+Guidelines and Tips
+- Keep prompts concise and explicit
+- Prefer JSON for structured outputs
+- Tune chunk size and overlap for your domain
+- Use evaluation to measure retrieval recall and groundedness
+- Add guardrails like timeouts and token limits for production
+
+Sample Content
+The goal is to provide minimal, copy-pasteable patterns to help teams move from prototypes to reliable, inspectable systems. The examples default to local models via Ollama for easy experimentation, and can be swapped for hosted providers when scaling.

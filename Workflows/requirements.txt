@@ -1,0 +1,6 @@
+langchain==0.2.14
+langchain-community==0.2.12
+langchain-text-splitters==0.2.2
+langchain-ollama>=0.1.0
+pydantic>=2.7.0
+python-dotenv>=1.0.1

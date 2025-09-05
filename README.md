@@ -10,6 +10,7 @@ Practical, minimal examples for building with LangChain and friends (LangGraph, 
 
 - Main Applications of LangChain
 - RAG Demo (Ollama + FAISS)
+- Workflows Demo (Map-Reduce, LCEL)
 - Troubleshooting
 
 ## Main Applications
@@ -41,7 +42,7 @@ Quickstart
   - `python RAG/ingest.py`
 - Ask questions:
   - `python RAG/query.py "What are the main applications of LangChain?"`
-  - or interactive: `python RAG/app.py`
+  - or interactive: `python RAG/app.py` (streams tokens)
 
 Configuration
 
@@ -61,6 +62,32 @@ RAG/
   data/               # Sample .md/.txt files
   index/              # Generated FAISS index (gitignored)
 ```
+
+## Workflows Demo (Map-Reduce, LCEL)
+
+Deterministic multi-step pipelines for summarization, structured extraction, translation, and classification using a local Gemma model via Ollama.
+
+Prerequisites
+
+- `ollama pull gemma3:1b`
+- Python 3.10+
+
+Quickstart (async)
+
+- Create venv and install deps:
+  - `python -m venv .venv && source .venv/bin/activate`
+  - `pip install -r Workflows/requirements.txt`
+- Try examples with the included sample:
+  - `python Workflows/summarize.py Workflows/data/multistep_sample.txt --concurrency 4`
+  - `python Workflows/extract.py Workflows/data/multistep_sample.txt --concurrency 4`
+  - `python Workflows/translate.py Workflows/data/multistep_sample.txt --lang es --concurrency 4`
+  - `python Workflows/classify.py Workflows/data/multistep_sample.txt --labels tutorial reference tips --concurrency 4`
+
+Configuration
+
+- `LLM_MODEL` (default `gemma3:1b`), `OLLAMA_BASE_URL` for non-default hosts.
+- Scripts support `--concurrency` to control async map parallelism.
+- Adjust chunking via `--chunk_size`/`--chunk_overlap` where available.
 
 ## Troubleshooting
 
