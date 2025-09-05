@@ -4,8 +4,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from langchain_community.chat_models import ChatOllama
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import ChatOllama
+from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser

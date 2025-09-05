@@ -5,8 +5,8 @@ These short snippets match the code and versions used in `RAG/`.
 ## Minimal RAG Chain (LCEL)
 
 ```python
-from langchain_community.chat_models import ChatOllama
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import ChatOllama
+from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -39,7 +39,7 @@ print(chain.invoke("What are the main applications of LangChain?"))
 ## Streaming Tokens
 
 ```python
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -67,7 +67,7 @@ retriever = vs.as_retriever(search_type="mmr", search_kwargs={"k": 6, "lambda_mu
 
 ```python
 import os
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 
 llm = ChatOllama(model=os.getenv("LLM_MODEL", "gemma3:1b"), temperature=0.2)
 ```
@@ -127,7 +127,7 @@ pdf_docs = loader.load()
 
 ```python
 from langchain_core.documents import Document
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 
 docs = [Document(page_content="Hello RAG", metadata={"source": "memory"})]

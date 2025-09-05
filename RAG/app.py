@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
-from langchain_community.chat_models import ChatOllama
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import ChatOllama
+from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 
 from langchain_core.prompts import ChatPromptTemplate
@@ -64,7 +64,7 @@ def make_chain():
 
 def main():
     load_dotenv()
-    print("Simple Gemma RAG. Type your question (or 'exit').")
+    print("Simple Gemma RAG (streaming). Type your question (or 'exit').")
     chain = make_chain()
     while True:
         try:
@@ -78,8 +78,10 @@ def main():
             print("Bye.")
             break
         try:
-            answer = chain.invoke(q)
-            print("\n" + answer)
+            print("")
+            for chunk in chain.stream(q):
+                print(chunk, end="", flush=True)
+            print("")
         except Exception as e:
             print(f"Error: {e}")
 

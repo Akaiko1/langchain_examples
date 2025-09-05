@@ -1,2 +1,2 @@
-- [[Home|README]]
+- [[README]]
 - [[Snippets]]
