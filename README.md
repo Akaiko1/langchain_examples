@@ -1,0 +1,75 @@
+# LangChain Examples
+
+Practical, minimal examples for building with LangChain and friends (LangGraph, FAISS, Ollama, etc.). Start locally, then adapt to your stack.
+
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![LangChain 0.2.x](https://img.shields.io/badge/LangChain-0.2.x-1C3C3C)](https://python.langchain.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-local%20LLMs-000000)](https://ollama.ai)
+
+## Contents
+
+- Main Applications of LangChain
+- RAG Demo (Ollama + FAISS)
+- Troubleshooting
+
+## Main Applications
+
+- RAG (Retrieval-Augmented Generation): Answer questions over your docs, wikis, tickets, and codebases using chunking, embeddings, retrievers, re-ranking, and citations.
+- Multi-step Workflows: Summarize, extract, translate, and classify at scale using deterministic chains and map-reduce patterns.
+- Tool-Using Agents: Safely call APIs, databases, search, and internal tools with plan→act loops (often built with LangGraph for reliability).
+- Structured Extraction: Produce typed JSON or fill schemas from semi-structured text via output parsers and validation.
+- Conversational AI with Memory: Build chat experiences that remember context and can take actions through function/tool calling.
+- Code & Data Assistants: Repo Q&A, refactoring helpers, SQL generation over warehouses/lakes, and “chat with your data.”
+
+## RAG Demo (Ollama + FAISS)
+
+A minimal Retrieval-Augmented Generation example lives in `RAG/` and lets you ask questions over local `.md`/`.txt` files using a Gemma model served by Ollama.
+
+Prerequisites
+
+- Install Ollama and pull models:
+  - `ollama pull gemma3:1b`
+  - `ollama pull nomic-embed-text`
+- Python 3.10+
+
+Quickstart
+
+- Create a virtual environment and install deps:
+  - `python -m venv .venv && source .venv/bin/activate`
+  - `pip install -r RAG/requirements.txt`
+- Ingest sample docs and build the FAISS index:
+  - `python RAG/ingest.py`
+- Ask questions:
+  - `python RAG/query.py "What are the main applications of LangChain?"`
+  - or interactive: `python RAG/app.py`
+
+Configuration
+
+- Models: `LLM_MODEL` (default `gemma3:1b`), `EMBED_MODEL` (default `nomic-embed-text`).
+- Paths: `INDEX_DIR`, `DATA_DIR` (default to subfolders of `RAG/`).
+- Ollama URL: `OLLAMA_BASE_URL` if not `http://127.0.0.1:11434`.
+
+Project Structure
+
+```text
+RAG/
+  README.md           # RAG-specific docs
+  requirements.txt    # LangChain, FAISS, dotenv
+  ingest.py           # Build local FAISS index from data/
+  query.py            # Query the index with Gemma via Ollama
+  app.py              # Simple interactive CLI
+  data/               # Sample .md/.txt files
+  index/              # Generated FAISS index (gitignored)
+```
+
+## Troubleshooting
+
+- Ollama not reachable: ensure the daemon is running; set `OLLAMA_BASE_URL`.
+- No docs indexed: add `.md`/`.txt` files to `RAG/data/` and rerun `python RAG/ingest.py`.
+- Import errors: verify you’re in the venv and ran `pip install -r RAG/requirements.txt`.
+
+## References
+
+- LangChain Docs: <https://python.langchain.com/>
+- LangGraph: <https://langgraph.readthedocs.io/>
+- Ollama: <https://ollama.ai/>
