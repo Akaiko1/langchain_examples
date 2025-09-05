@@ -1,0 +1,14 @@
+Agents vs. Workflows
+
+Workflows (Chains)
+- Deterministic, linear or branching steps.
+- Great for summarization, extraction, translations, and batch jobs.
+- Easier to test and reason about.
+
+Agents
+- Decide which tool to use next based on intermediate results.
+- Useful when querying APIs/DBs, browsing, or orchestrating multiple tools.
+- Prefer structured state machines (e.g., LangGraph) for reliability.
+
+Rule of Thumb
+- Start with a workflow; add agentic steps only when necessary.

@@ -1,0 +1,24 @@
+LangChain Main Applications
+
+1) Retrieval-Augmented Generation (RAG)
+- Answer questions over private docs, wikis, tickets, and codebases.
+- Uses chunking, embeddings, vector search, optional re-ranking, and citations.
+
+2) Multi-step Workflows
+- Summarization, extraction, translation, and classification at scale.
+- Deterministic chains and map-reduce patterns for reliability.
+
+3) Tool-Using Agents
+- Safely call APIs, databases, search, and internal tools.
+- Use explicit planners/routers; prefer LangGraph for robust state.
+
+4) Structured Extraction
+- Generate typed JSON or fill schemas from semi-structured text.
+- Use output parsers and validation/repair loops.
+
+5) Conversational AI with Memory
+- Persistent session memory or vector-backed recall for long-running chats.
+- Function/tool calling to take actions.
+
+6) Code & Data Assistants
+- Repo Q&A, PR summaries, refactor suggestions, SQL generation and analysis.

@@ -1,0 +1,10 @@
+RAG Tips and Best Practices
+
+- Chunking: Tune chunk_size and chunk_overlap; start with ~800/120.
+- Metadata: Store filename, section, page numbers for better citations.
+- Hybrid Search: Mix dense (embeddings) with keyword/BM25 when possible.
+- Re-ranking: Use a cross-encoder or LLM for top-k re-ranking to improve precision.
+- Prompting: Keep a concise instruction and inject context clearly.
+- Answer Style: Ask for sources and encourage “I don’t know” when unsure.
+- Evaluation: Measure retrieval recall and groundedness, not just fluency.
+- Guardrails: Timeouts, max tokens, and tool-call limits to control cost/latency.
