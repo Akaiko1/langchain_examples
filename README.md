@@ -11,6 +11,7 @@ Practical, minimal examples for building with LangChain and friends (LangGraph, 
 - Main Applications of LangChain
 - RAG Demo (Ollama + FAISS)
 - Workflows Demo (Map-Reduce, LCEL)
+- Tool-Using Agent Demo (Terminal)
 - Troubleshooting
 
 ## Main Applications
@@ -88,6 +89,34 @@ Configuration
 - `LLM_MODEL` (default `gemma3:1b`), `OLLAMA_BASE_URL` for non-default hosts.
 - Scripts support `--concurrency` to control async map parallelism.
 - Adjust chunking via `--chunk_size`/`--chunk_overlap` where available.
+
+## Tool-Using Agent Demo (Terminal)
+
+A minimal ReAct-style agent lives in `Agents/`. It can shell out to search within this repository and list directory contents before answering.
+
+Prerequisites
+
+- `ollama pull gemma3:1b`
+- Python 3.10+
+
+Quickstart
+
+- Create a virtual environment and install deps:
+  - `python -m venv .venv && source .venv/bin/activate`
+  - `pip install -r Agents/requirements.txt`
+- Launch the interactive CLI:
+  - `python Agents/terminal_agent.py`
+- Ask a single question without entering the loop:
+  - `python Agents/terminal_agent.py --question "Where is repo_search defined?"`
+- Hide the default intermediate trace:
+  - `python Agents/terminal_agent.py --question "What are the main repo folders?" --hide-steps`
+  - The CLI no longer injects fallback answers; outputs are agent-driven.
+
+Configuration
+
+- `LLM_MODEL` selects the Ollama chat model (default `gemma3:1b`). Set `LLM_TEMPERATURE` to adjust sampling (default `0.2`).
+- `OLLAMA_BASE_URL` points to a non-default Ollama host if needed.
+- Built-in tools include `repo_search` (text search), `list_repo` (directory listings), and `count_occurrences` (case-sensitive token counts). `repo_search` prefers `rg` (ripgrep) but falls back to a pure-Python scan when unavailable. Tool traces print by default—pass `--hide-steps` to suppress them. The CLI does not inject fallback answers.
 
 ## Troubleshooting
 

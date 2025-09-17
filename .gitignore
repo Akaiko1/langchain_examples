@@ -2,3 +2,5 @@
 .venv/
 
 Workflows/__pycache__/
+
+Agents/__pycache__/
